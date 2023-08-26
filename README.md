@@ -1,3 +1,3 @@
 # ProgramacaoOrientadaObjetos
 
-1 - Modelagem Sistema de Aluguel de Bikes
+atividade01: Modelagem Sistema de Aluguel de Bikes
