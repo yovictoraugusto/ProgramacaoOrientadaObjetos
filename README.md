@@ -6,3 +6,7 @@
   - remove user
   - rent bike
   - return bike
+- atividade11-09: Mais métodos da aplicação de aluguel de bikes:
+  - listagem de usuários
+  - listagem de reservas/aluguéis
+  - listagem de bikes 
