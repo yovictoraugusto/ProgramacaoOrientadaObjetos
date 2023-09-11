@@ -9,10 +9,12 @@
   "author": "Victor",
   "license": "ISC",
   "devDependencies": {
+    "@types/sinon": "^10.0.16",
     "typescript": "^5.1.6"
   },
   "dependencies": {
     "date-fns": "^2.30.0",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "sinon": "^15.2.0"
   }
 }

@@ -1,13 +1,15 @@
 import { Bike } from "./bike";
+import { Crypt } from "./crypt";
 import { Rent } from "./rent";
 import { User } from "./user";
 import crypto from 'crypto'
 const bcrypt = require('bcrypt')
 
-export class App{
+  export class App{
     users: User[] = []
     bikes: Bike[] = []
     rents: Rent[] = []
+    crypt: Crypt = new Crypt
 
     findUser(email: string): User {
         return this.users.find(user => user.email === email)
@@ -17,7 +19,7 @@ export class App{
         return this.bikes.find(bike => bike.id === id)
     }
 
-    registerUser(user: User): string {
+    async registerUser(user: User): Promise<string> {
         for (const rUser of this.users) {
             if (rUser.email === user.email) {
                 throw new Error('Duplicate user.')
@@ -26,25 +28,12 @@ export class App{
         const newId = crypto.randomUUID()
         user.id = newId
 
-        //password encryption
-        bcrypt.hash(user.password, 10, hash) => {
-          if(err){
-            console.error('Erro ao criar o hash:',err)
-            return
-          }
-          user.password = hash
-        }
-      
+        const encryptPassword = await this.crypt.encrypt(user.password)
+        user.password = encryptPassword
         this.users.push(user)
         return newId
     }
 
-    //register bike
-    // registerBike(bike: Bike): string{
-    //     bike.id = crypto.randomUUID()
-    //     this.bikes.push(bike)
-    //     return bike.id
-    // }
 
     registerBike(bike: Bike): string{
         const newId = crypto.randomUUID()
@@ -52,11 +41,6 @@ export class App{
         this.bikes.push(bike)
         return newId
     }
-
-    //removeUser
-    // removeUser(user: User): void{
-    //     this.users.slice(this.users.indexOf(user))
-    // }
 
     removeUser(email: string):void{
         const userIndex = this.users.findIndex(user => user.email === email)
@@ -67,106 +51,62 @@ export class App{
         throw new Error('User not found.')
     }
 
-    //rent bike
-    // rentBike(bikeId: string, userEmail: string, startDate: Date, endDate: Date){
-    //     const bike = this.findBike(bikeId)
-    //     const user = this.findUser(userEmail)
-    //     //Arrray somente com as reservas para bike
-    //     const result = this.rents.filter(rent => rent.bike === bike)
-    //     //tentar criar o rent com o array e as informações da reserva
-    //     const newRent = Rent.create(result, bike, user, startDate, endDate)
-    //     //adicionar a reserva ao array de reservas
-    //     this.rents.push(newRent)
-    // }
-
-    rentBike(bikeId: string, userEmail:string, startDate:Date, endDate:Date):void{
-        const bike = this.bikes.find(bike => bike.id === bikeId)
-        const user = this.findUser(userEmail)
-        if(!bike){
-            throw new Error('Bike not found.')
-        }
-        if(!user){
-            throw new Error('User not found.')
-        }
-        const bikeRents = this.rents.filter(rent => rent.bike.id === bikeId && !rent.dateReturn)
-        const newRent = Rent.create(bikeRents, bike, user, startDate, endDate)
-        this.rents.push(newRent)
+    rentBike(bikeId: string, userEmail:string):void{
+      const now = new Date()  
+      const bike = this.bikes.find(bike => bike.id === bikeId)
+      const user = this.findUser(userEmail)
+      if(!bike){
+          throw new Error('Bike not found.')
+      }
+      if(!user){
+          throw new Error('User not found.')
+      }
+      if(!bike.available){
+        throw new Error("Bike not available")
+      }
+      bike.available = false
+      const newRent = new Rent (bike, user, now)
+      this.rents.push(newRent)
     }
 
-    //return bike
-    // returnBike(rent: Rent): void{
-    //     const today = new Date()
-    //     for(const rRent of this.rents){
-    //         if(rRent === rent){
-    //             rent.dateReturn = today
-    //         }
-    //     }
-    // }
-
-    returnBike(bikeId, userEmail){
-        const today = new Date()
-        const rent = this.rents.find(rent => rent.bike.id === bikeId && 
-            rent.user.email === userEmail && 
-            rent.dateReturn === undefined &&
-            rent.dateFrom <= today)
-        if(rent){
-            rent.dateReturn  = today
-            return
-        }
+    returnBike(bikeId, userEmail):Number{
+      const today = new Date()
+      const rent = this.rents.find(rent => rent.bike.id === bikeId &&
+        rent.user.email === userEmail &&
+        rent.bike.available === undefined)
+      if(!rent){
         throw new Error('Rent not found.')
+      }
+      rent.bike.available = true
+      rent.end = today
+      const hour = diff_hours(rent.start,rent.end)
+      return rent.bike.rate * hour
     }
 
-  //listagem de usuários
-  userList(user: User): void{
-    console.log("Listagem de Usuários:")
-    for(const rUser of this.users){
-      console.log("NOME: " + rUser.name)
-      console.log("EMAIL: "+ rUser.email)
-      console.log("=======================================")
+    listUsers(): User[]{
+      return this.users
     }
-  }
 
-  //listagem de reservas/aluguéis
-  rentList(rent: Rent): void{
-    console.log("Listagem dos Alugueis:")
-    for(const rRent of this.rents){
-      console.log("BIKE: "+ rRent.bike.id)
-      console.log("USUÁRIO: "+ rRent.user.email)
-      console.log("DATA DE INICÍO: "+ rRent.dateFrom)
-      console.log("DATA DE FIM: " +rRent.dateTo)
-      console.log("=======================================")
+    listRent(): Rent[]{
+      return this.rents
     }
-  }
   
-  //listagem de bikes
-  bikeList(bike: Bike):void{
-    console.log("Listatem das bicicletas:")
-    for(const rBike of this.bikes){
-      console.log("NOME: "+rBike.name)
-      console.log("ID: "+rBike.id)
-      console.log("TIPO: "+rBike.type)
-      console.log("PREÇO: "+rBike.ratings)
+    listBikes(): Bike[]{
+      return this.bikes
     }
-  }
 
-  //authentic user
-  authenticUser(rUser: User, userId: string, userPassword: string):void{
-    if(rUser.email === userId){
-      bcrypt.compare(rUser.password, userPassword, )err,result)=>{
-        if(err){
-          console.error("Erro ao comparar as senhas:",err)
-          return
-        }
-        if(result){
-          console.log("Login realizado!")
-        }else{
-          console.log("A senha está incorreta.")
-        }
-      })
-    }else{
-      console.log('Login errado')
+    async authenticate(userEmail: string, password:string): Promise<boolean>{
+      const user = this.findUser(userEmail)
+      if(!user) throw new Error('User not found')
+      return await this.crypt.compare(user.password, password)
     }
-    
-  }
-  
+
 }
+
+function diff_hours(dt2: Date, dt1: Date){
+
+  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+  diff /= (60 * 60);
+  return Math.abs(diff);
+  
+ }

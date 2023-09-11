@@ -5,9 +5,10 @@ export class Bike{
         public bodySize: number,
         public maxLoad: number,
         public rate: number,
-        public description: string,
-        public ratings: number,
-        public imageUrls: string[],
+        public description?: string,
+        public ratings?: number,
+        public imageUrls?: string[],
+        public available?: boolean,
         public id?: string // ? é algo opcional
     ){}
 }

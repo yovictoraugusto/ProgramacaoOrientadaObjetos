@@ -1,19 +1,22 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = require("./app");
-const bike_1 = require("./bike");
 const user_1 = require("./user");
-const app = new app_1.App();
-const bike = new bike_1.Bike('Mountain bike', 'mountain', 123, 500, 100.5, 'desc', 5, []);
-const bikeId = app.registerBike(bike);
-//console.log(app.bikes)
-const user = new user_1.User('Maria', 'maria@email.com', '1234');
-const user1 = new user_1.User('Joao', 'maria@email.com', '1234');
-app.registerUser(user);
-app.registerUser(user1);
-console.log(app.users);
-app.removeUser(user.email);
-console.log(app.users);
-// const today = new Date()
-// const twoDaysFromToday = new Date()
-// const rent1 = Rent.create([], bike, user, today, twoDaysFromToday)
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const app = new app_1.App();
+        const user1 = new user_1.User('Jose', 'jose@email.com', '1234');
+        yield app.registerUser(user1);
+        console.log(yield app.authenticate('jose@email.com', '1234'));
+    });
+}
+main();
