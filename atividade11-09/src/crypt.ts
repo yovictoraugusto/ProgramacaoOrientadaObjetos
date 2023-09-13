@@ -7,7 +7,7 @@ export class Crypt{
         return await bcrypt.hash(plain, this.rounds)
     }
 
-    async compare(plain:string, encrypt: string): Promise<boolean>{
-        return await bcrypt.compare(plain, encrypt)
+    async compare(plain:string, encrypted: string): Promise<boolean>{
+        return await bcrypt.compare(plain, encrypted)
     }
 }

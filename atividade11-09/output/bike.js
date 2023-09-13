@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bike = void 0;
 class Bike {
-    constructor(name, type, bodySize, maxLoad, rate, description, ratings, imageUrls, id // ? é algo opcional
+    constructor(name, type, bodySize, maxLoad, rate, description, ratings, imageUrls, available = true, id // ? é algo opcional
     ) {
         this.name = name;
         this.type = type;
@@ -12,6 +12,7 @@ class Bike {
         this.description = description;
         this.ratings = ratings;
         this.imageUrls = imageUrls;
+        this.available = available;
         this.id = id;
     }
 }

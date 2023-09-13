@@ -23,9 +23,9 @@ class Crypt {
             return yield bcrypt_1.default.hash(plain, this.rounds);
         });
     }
-    compare(plain, encrypt) {
+    compare(plain, encrypted) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield bcrypt_1.default.compare(plain, encrypt);
+            return yield bcrypt_1.default.compare(plain, encrypted);
         });
     }
 }

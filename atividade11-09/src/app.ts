@@ -27,7 +27,6 @@ const bcrypt = require('bcrypt')
         }
         const newId = crypto.randomUUID()
         user.id = newId
-
         const encryptPassword = await this.crypt.encrypt(user.password)
         user.password = encryptPassword
         this.users.push(user)
@@ -52,7 +51,6 @@ const bcrypt = require('bcrypt')
     }
 
     rentBike(bikeId: string, userEmail:string):void{
-      const now = new Date()  
       const bike = this.bikes.find(bike => bike.id === bikeId)
       const user = this.findUser(userEmail)
       if(!bike){
@@ -65,20 +63,18 @@ const bcrypt = require('bcrypt')
         throw new Error("Bike not available")
       }
       bike.available = false
-      const newRent = new Rent (bike, user, now)
+      const newRent = new Rent (bike, user, new Date())
       this.rents.push(newRent)
     }
 
     returnBike(bikeId, userEmail):Number{
-      const today = new Date()
+      const now = new Date()
       const rent = this.rents.find(rent => rent.bike.id === bikeId &&
         rent.user.email === userEmail &&
-        rent.bike.available === undefined)
-      if(!rent){
-        throw new Error('Rent not found.')
-      }
+        !rent.end)
+      if(!rent)throw new Error('Rent not found.')
       rent.bike.available = true
-      rent.end = today
+      rent.end = now
       const hour = diff_hours(rent.start,rent.end)
       return rent.bike.rate * hour
     }
@@ -98,13 +94,12 @@ const bcrypt = require('bcrypt')
     async authenticate(userEmail: string, password:string): Promise<boolean>{
       const user = this.findUser(userEmail)
       if(!user) throw new Error('User not found')
-      return await this.crypt.compare(user.password, password)
+      return await this.crypt.compare(password, user.password)
     }
 
 }
 
 function diff_hours(dt2: Date, dt1: Date){
-
   var diff =(dt2.getTime() - dt1.getTime()) / 1000;
   diff /= (60 * 60);
   return Math.abs(diff);
