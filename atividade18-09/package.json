@@ -1,0 +1,20 @@
+{
+  "name": "banco",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/sinon": "^10.0.16",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "moment": "^2.29.4",
+    "sinon": "^15.2.0"
+  }
+}
