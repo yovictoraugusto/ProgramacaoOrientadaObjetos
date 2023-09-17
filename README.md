@@ -10,3 +10,4 @@
   - listagem de usuários
   - listagem de reservas/aluguéis
   - listagem de bikes 
+- atividade 6(18-09): Localização da Bike
