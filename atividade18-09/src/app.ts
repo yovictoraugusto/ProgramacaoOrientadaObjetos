@@ -3,6 +3,7 @@ import { Crypt } from "./crypt";
 import { Rent } from "./rent";
 import { User } from "./user";
 import crypto from 'crypto'
+import * as fs from 'fs-extra';
 const bcrypt = require('bcrypt')
 
   export class App{
@@ -95,6 +96,20 @@ const bcrypt = require('bcrypt')
       const user = this.findUser(userEmail)
       if(!user) throw new Error('User not found')
       return await this.crypt.compare(password, user.password)
+    }
+
+    async readHTMLFile(bike:Bike) {
+      try {
+        const htmlContent = await fs.readFile('/index.html', 'utf-8');
+  
+        // Faça o que você precisa com o conteúdo HTML
+        console.log(htmlContent);
+        
+  
+        // Agora você pode processar o conteúdo HTML como necessário
+      } catch (error) {
+        console.error('Erro ao ler o arquivo HTML:', error);
+      }
     }
 
 }

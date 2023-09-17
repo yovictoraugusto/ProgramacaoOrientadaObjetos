@@ -8,31 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = require("./app");
 const bike_1 = require("./bike");
-const user_1 = require("./user");
-const sinon_1 = __importDefault(require("sinon"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = new app_1.App();
-        const user1 = new user_1.User('Jose', 'jose@email.com', '1234');
-        yield app.registerUser(user1);
-        console.log(user1.password);
+        // const user1 = new User('Jose', 'jose@email.com', '1234')
+        // await app.registerUser(user1)
+        // console.log(user1.password)
         const bike = new bike_1.Bike('caloi mountainbike', 'Mountain Bike', 0, 0, 234, 1234, 100.0);
-        const clock = sinon_1.default.useFakeTimers();
-        app.registerBike(bike);
-        //console.log('Bike disponível: ', bike.available)
-        app.rentBike(bike.id, user1.email);
-        //console.log('Bike disponível: ', bike.available)
-        clock.tick(1000 * 60 * 65);
-        //console.log(app.returnBike(bike.id, user1.email))
-        //console.log('Bike disponível: ', bike.available)
-        const test = yield app.authenticate(user1.email, '1234');
-        console.log(test);
+        // const clock = sinon.useFakeTimers();
+        // app.registerBike(bike)
+        // //console.log('Bike disponível: ', bike.available)
+        // app.rentBike(bike.id, user1.email)
+        // //console.log('Bike disponível: ', bike.available)
+        // clock.tick(1000 * 60 * 65)
+        // //console.log(app.returnBike(bike.id, user1.email))
+        // //console.log('Bike disponível: ', bike.available)
+        // const test = await app.authenticate(user1.email, '1234')
+        // console.log(test)
+        app.readHTMLFile(bike);
+        console.log(bike);
     });
 }
 main();

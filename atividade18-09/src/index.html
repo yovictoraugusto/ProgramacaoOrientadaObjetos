@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obter Geolocalização</title>
+</head>
+<body>
+    <!-- <h1>Obter Geolocalização</h1>
+    <button onclick="getLocation()">Obter Localização</button>
+    <div id="pos">
+        <h2>Localização Atual:</h2>
+        <p id="latitude">Latitude:</p>
+        <p id="longitude">Longitude:</p>
+    </div> -->
+    <h1>Obter e Atribuir Localização</h1>
+    <button onclick="getLocation()">Obter Localização</button>
+    <div>
+        <span>Latitude:</span>
+        <input type="text" id="latitudeInput" disabled>
+    </div>
+    <div>
+        <span>Longitude:</span>
+        <input type="text" id="longitudeInput" disabled>
+    </div>
+
+    <script>
+        function updateBikeLocation(latitude, longitude) {
+            bikePosition.latitude = latitude;
+            bikePosition.longitude = longitude;
+            alert('Localização da bicicleta atualizada com sucesso!');
+        }
+
+        function getLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    document.getElementById('latitudeInput').value = latitude.toString();
+                    document.getElementById('longitudeInput').value = longitude.toString();
+
+                    bike.latitude = latitude;
+                    bike.longitude = longitude;
+                });
+            } else {
+                alert("Geolocalização não suportada neste navegador.");
+            }
+        }
+    </script>
+</body>
+</html>
