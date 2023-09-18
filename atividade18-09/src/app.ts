@@ -3,7 +3,7 @@ import { Crypt } from "./crypt";
 import { Rent } from "./rent";
 import { User } from "./user";
 import crypto from 'crypto'
-import * as fs from 'fs-extra';
+import { Location } from "./location";
 const bcrypt = require('bcrypt')
 
   export class App{
@@ -98,19 +98,11 @@ const bcrypt = require('bcrypt')
       return await this.crypt.compare(password, user.password)
     }
 
-    async readHTMLFile(bike:Bike) {
-      try {
-        const htmlContent = await fs.readFile('/index.html', 'utf-8');
-  
-        // Faça o que você precisa com o conteúdo HTML
-        console.log(htmlContent);
-        
-  
-        // Agora você pode processar o conteúdo HTML como necessário
-      } catch (error) {
-        console.error('Erro ao ler o arquivo HTML:', error);
-      }
-    }
+    moveBikeTo(bikeId: string, location: Location): void {
+      const bike = this.bikes.find(bike => bike.id === bikeId)
+      bike.position.latitude = location.latitude
+      bike.position.longitude = location.longitude
+  }
 
 }
 
