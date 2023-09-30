@@ -1,4 +1,4 @@
-export class DuplicateUser extends Error {
+export class DuplicateUserError extends Error {
     public readonly name = 'DuplicateUser'
 
     constructor() {
