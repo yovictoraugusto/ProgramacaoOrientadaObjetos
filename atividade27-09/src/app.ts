@@ -10,6 +10,7 @@ import { RentRepo } from "./ports/rent-repo";
 import { UserRepo } from "./ports/user-repo";
 import { BikeRepo } from "./ports/bike-repo";
 import { UnavailableBikeError } from "./errors/unavailable-bike-error";
+import { RentNotFound } from "./errors/rent-not-found-error";
 
 export class App {
     crypt: Crypt = new Crypt()
@@ -64,7 +65,7 @@ export class App {
     async returnBike(bikeId: string, userEmail: string): Promise<number> {
         const now = new Date()
         const rent = await this.rentRepo.findOpen(bikeId, userEmail)
-        if (!rent) throw new Error('Rent not found.')
+        if (!rent) throw new RentNotFound
         rent.end = now
         await this.rentRepo.update(rent.id, rent)
         rent.bike.available = true
