@@ -13,3 +13,4 @@
 - atividade 6(18-09): Localização da Bike
 - atividade 7(20-09): Completar o teste incompleto e implementar o que falta
 - atividade 8(27-09): Criar testes para todos os métodos do App (menos os de listagem)
+- atividade 9(02/10): Teste & implementação - RentNotFoundError
