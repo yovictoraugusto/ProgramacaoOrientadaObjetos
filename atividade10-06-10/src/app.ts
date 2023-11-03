@@ -50,7 +50,7 @@ export class App {
         await this.findUser(email)
         const openRent = await this.rentRepo.findOpenRentsFor(email)
         if(openRent) throw new userOpenRentError
-        await this.userRepo.remove(email)
+        await this.userRepo.remove(email    )
     }
     
     async rentBike(bikeId: string, userEmail: string): Promise<string> {

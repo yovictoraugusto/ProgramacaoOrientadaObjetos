@@ -1,0 +1,66 @@
+-- -----------------------------------------------------
+-- Table `bikes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bikes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NOT NULL,
+  `type` VARCHAR(200) NOT NULL,
+  `bodySize` INT NULL,
+  `maxLoad` INT NULL,
+  `rate` FLOAT NULL,
+  `description` VARCHAR(200) NULL,
+  `ratings` INT NULL,
+  `available` TINYINT NULL DEFAULT 1,
+  `latitude` FLOAT NULL DEFAULT 0,
+  `longitude` FLOAT NULL DEFAULT 0,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bike_imageUrls`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bike_imageUrls` (
+  `bike_id` INT NOT NULL,
+  `imageUrl` VARCHAR(200) NOT NULL,
+  CONSTRAINT `bike_imageUrls_fk`
+    FOREIGN KEY (`bike_id`)
+    REFERENCES `bikes` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NOT NULL,
+  `email` VARCHAR(200) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `rents`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `rents` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `bike_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `start` DATETIME NOT NULL,
+  `end` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `rents_user_fk`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `rents_bike_fk`
+    FOREIGN KEY (`bike_id`)
+    REFERENCES `bikes` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
